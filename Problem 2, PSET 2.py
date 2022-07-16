@@ -1,4 +1,20 @@
-from __future__ import annotations
+#!/usr/bin/env python3
+
+"""
+Usage: 
+
+    e.g., <script_name>.py 5 4 10
+    e.g., <script_name>.py 7 4
+    e.g., <script_name>.py
+
+    Run script passing in `n`, `m`, `g` where `n` is the length of classroom
+    along one dimension, `m` is the number of initially infected students, and
+    `g` is the number of outbreaks to simulate.
+
+    Running script without `g` defaults to 1 iteration. Additionally omitting
+    `n`, `m` will result in using the `TEST_GRID` class variable as the initial
+    state. (This is useful to test particular starting configurations.)
+"""
 
 import copy
 
@@ -93,7 +109,9 @@ class Classroom:
             last_total = current_total
             if self.is_print:
                 print("\n", np.array2string(self.seat_grid, prefix=" "), "\n")
-                print(f"Boundary Length Δ: {self.boundary_length - last_boundary_length}")
+                print(
+                    f"Boundary Length Δ: {self.boundary_length - last_boundary_length}"
+                )
                 print(f"Boundary Length: {self.boundary_length}\n")
         if self.is_print and np.sum(self.seat_grid) == self.n**2:
             print("All students infected!")
@@ -114,7 +132,7 @@ def main():
         )
         n = m = 0
 
-    is_print = input("Print outputs? ('Y', 'y') ") in ("Y", "y")
+    is_print = input("Print outputs? ('Y', 'n') ") in ("Y", "y")
     print("\n")
 
     for _ in range(g):
