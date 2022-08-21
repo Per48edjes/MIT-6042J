@@ -1,0 +1,133 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem, hyperref, scrextend}
+
+\newtheorem*{solution}{Solution}
+\newtheorem{case}{Case}
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+	\def\svgwidth{\columnwidth}
+	\import{./figures/}{#1.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+\section{Team Problem: A Mystery}
+A certain cabal within the 6.042 course staff is plotting to make the final
+exam \emph{ridiculously hard}. ("Problem 1.  Prove that the axioms of
+mathematics are complete and consistent. Express your answer in Mayan
+hieroglyphics.") The only way to stop their evil plan is to determine exactly
+who is in the cabal. The course staff consists of nine people:
+\begin{equation*} \lbrace \text{Oscar}, \text{Stav}, \text{Darren},
+\text{Patrice}, \text{David}, \text{Nick}, \text{Martyn}, \text{Tom} \rbrace
+\end{equation*}
+The cabal is a subset of the nine people. A membership roster has been found and appears
+below, but it is deviously encrypted in logic notation. The predicate $iscabal$ indicates who is
+in the cabal; that is, $incabal(x)$ is true if and only if $x$ is a member. Translate each statement
+below into English and deduce who is in the cabal.
+
+\begin{enumerate}[label=(\roman*)]
+	\item \label{itm:1} $\exists x\ \exists y\ \exists z\ \left( x \neq y \land x \neq z \land y \neq z \land incabal(x) \land incabal(y) \land incabal(z) \right)$
+\medbreak
+	There are at least three people in the cabal.
+\item \label{itm:2} $\lnot \left( incabal(\text{Stav}) \land incabal(\text{David})\right)$
+\medbreak
+	At least one of Stav or David are \textit{not} in the cabal.
+	\begin{center}
+	$\Updownarrow$
+	\end{center}
+	Stav and David cannot both be in the cabal.
+\medbreak
+	\item \label{itm:3} $(incabal(\text{Martyna}) \lor incabal(\text{Patrice})) \implies \forall x\ incabal(x)$
+\medbreak
+	If at least one person isn't in the cabal, then Martyna and Patrice are textit{not} in the cabal.
+\medbreak
+\item \label{itm:4} $incabal(\text{Stav}) \implies incabal(\text{David})$
+\medbreak
+	If Stav is in the cabal, then David is in the cabal, too.
+	\begin{center}
+	$\Updownarrow$
+	\end{center}
+	If David is \textit{not} in the cabal, then Stav isn't either.
+\medbreak
+	\item \label{itm:5} $incabal(\text{Darren}) \implies incabal(\text{Martyna})$
+\medbreak
+	If Darren is in the cabal, then Martyna is in the cabal, too.
+	\begin{center}
+	$\Updownarrow$
+	\end{center}
+	If Martyna is \textit{not} in the cabal, then Darren is \textit{not} in the cabal.
+\medbreak
+	\item \label{itm:6} $\left(incabal(\text{Oscar}) \lor incabal(\text{Nick})\right) \implies \lnot incabal(\text{Tom})$
+\medbreak
+	If Oscar is in the cabal, then Tom isn't \textit{and} if Nick is in the cabal, then Tom isn't.
+	\begin{center}
+	$\Updownarrow$
+	\end{center}
+	If Tom is in the cabal, then neither Oscar nor Nick are in the cabal.
+\medbreak
+	\item \label{itm:7} $\left(incabal(\text{Oscar}) \lor incabal(\text{David})\right) \implies \lnot incabal(\text{Marten})$
+\medbreak
+	If Oscar is in the cabal, then Marten isn't \textit{and} if David is in the cabal, then Marten isn't.
+	\begin{center}
+	$\Updownarrow$
+	\end{center}
+	If Marten is in the cabal, then neither Oscar nor David are in the cabal.
+\end{enumerate}
+
+\begin{solution}
+
+From \ref{itm:2}, we know that at least one of Stav or David are \textit{not}
+cabal members, which implies (by \ref{itm:3}) that Martyna and Patrice are not
+cabal members. From \ref{itm:4}, we know Stav can't be in the cabal otherwise
+David would be, too, yielding a contradiction vis-a-vis \ref{itm:2}. The
+contrapositive of \ref{itm:5} exculpates Darren since we already know Martyna
+is not a cabal member.
+
+At this stage 5 members are left: $\lbrace \text{Oscar}, \text{Nick},
+\text{Marten}, \text{Tom}, \text{David} \rbrace$. If we assume Oscar is in the
+cabal, then by \ref{itm:6} and \ref{itm:7}, the cabal must be $\lbrace
+\text{Oscar}, \text{Nick}, \text{David} \rbrace$.
+
+We can check that this is the only logical configuration of the cabal by
+considering the remaining cases concerning David's and Oscar's memberships:
+
+\begin{addmargin}[1em]{2em}
+	\begin{case}
+		(Neither David nor Oscar are in the cabal) By necessity, from \ref{itm:1},
+		the cabal would be $\lbrace \text{Nick}, \text{Martin}, \text{Tom} \rbrace$.
+		Thus, this case cannot be since the contrapositive of \ref{itm:6} is
+		contradicted by having Nick and Tom in the cabal together.
+	\end{case}
+
+	\begin{case}
+		(David is in the cabal but Oscar is not) Again, a contradiction arises in
+		this case because at least one of Marten or Tom must be included by
+		\ref{itm:2}. If Tom were to be included, Nick would be out (by \ref{itm:6})
+		forcing Marten to be included (which cannot be true by the
+		contrapositive of \ref{itm:7} ruling out David -- something we assumed for
+		this case).
+	\end{case}
+
+	\begin{case}
+		(Oscar is in the cabal but David is not) This case does not produce a valid
+		cabal because the inclusion of Oscar (and David, by assumption), yields a
+		contradiction to \ref{itm:2} since Oscar's inclusion only leaves Nick as
+		co-conspirator.
+	\end{case}
+\end{addmargin}
+\end{solution}
+
+\end{document}
