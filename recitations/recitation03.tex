@@ -1,0 +1,247 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref, chngcntr}
+
+\newenvironment{subproof}[1][\proofname]{%
+  \renewcommand{\qedsymbol}{$\blacksquare$}%
+  \begin{proof}[#1]%
+}{%
+  \end{proof}%
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+  \def\svgwidth{\columnwidth}
+  \import{./figures/}{#1.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+	\section{Problem: Breaking a Chocolate Bar}%
+	\label{sec:Problem: Breaking a Chocolate Bar}
+
+	We are given a chocolate bar with $m \times n$ squares of chocolate, and our
+	task is to divide it into $mn$ individual squares. We are only allowed to
+	split one piece of chocolate at a time using a vertical or a horizontal
+	break.
+
+	For example, suppose that the chocolate bar is 2 × 2. The first split
+	makes two pieces, both 2 × 1. Each of these pieces requires one more split to
+	form single squares. This gives a total of three splits.
+
+	Prove that the number of times you split the bar does not depend on the
+	sequence of splits you make.
+
+	\begin{proof}[Proof (by induction)]
+		We will show that the number of "splits" (as defined above) on a $m \times
+		n$ required to yield $mn$ unit pieces is independent of the sequence of
+		splits made. This is immediate by the following theorem:
+
+		\begin{theorem}
+			\label{thm:P(m,n)}
+			To divide a $m \times n$ chocolate bar into unit pieces, $mn - 1$ splits are required.
+		\end{theorem}
+
+		Let Theorem~\ref{thm:P(m,n)} be $P(m,n)$ which we would like to prove
+		$\forall m, n \in \mathbb{Z}^{+}$. The general strategy is composed of the
+		following steps:
+
+		\begin{enumerate}
+			\item \label{lem:base} Establish $P(1, 1)$
+			\item \label{lem:n_induct} Establish $P(1, n) \implies P(1, n + 1)$
+			\item \label{lem:m_induct} Establish $P(m, n) \implies P(m + 1, n)$
+		\end{enumerate}
+
+		\begin{lemma} $\forall n \in \mathbb{Z}^{+}.\ P(1, n)$
+			\begin{subproof}[Proof (by induction)] \label{lem:1}
+				Step~\ref{lem:base} and Step~\ref{lem:n_induct}
+				establish $P(1, n)$.  Step~\ref{lem:base} is
+				true since $(1 \cdot 1) - 1 = 0$ and the unit
+				piece needs no more splits. Assume $P(1, n)
+				\land P(1, n - 1) \land P(1, n - 2) \land
+				\ldots \land P(1, 1)$ to set up strong
+				induction. Since a $1 \times (n+1)$ piece of
+				chocolate consists of a $1 \times k$ piece and
+				a $1 \times (n + 1 - k)$ piece (for $1 \leq k
+				\leq n$), the total number of splits is $1 + (n
+				- 1) = n$.
+
+				Thus, Step ~\ref{lem:n_induct}
+				is established and $\forall n \in \mathbb{Z}^{+}.\ P(1, n)$ has been proven
+				by strong induction (on $n$).
+			\end{subproof}
+		\end{lemma}
+
+		To prove $P(m,n)$ by strong induction, we will use
+		Lemma~\ref{lem:1} as the base case. For the inductive step, we
+		assume $P(1, n) \land P(2, n) \land \ldots \land P(m,n)$ to
+		establish $P(m+1,n)$, i.e., $(m+1)n - 1$ splits are required to
+		divide a bar composed of $(m+1)n$ unit pieces. Because a
+		$(m+1)n$ -sized bar consists of a piece with dimensions $k
+		\times n$ and a piece with $(m + 1 - k) \times n$ dimensions
+		(for $1 \leq k \leq m$), the number of splits required is $1 +
+		(kn-1) + (((m + 1) - k)n - 1) = (m+1)n -  1$.  This proves
+		Step~\ref{lem:m_induct} via strong induction on $m$.
+
+	\end{proof}
+
+
+	\section{Problem: The Temple of Forever}%
+	\label{sec:Problem: The Temple of Forever}
+
+	Each monk entering the Temple of Forever is given a bowl with 15 red
+	beads and 12 green beads. Each time the Gong of Time rings, a monk must
+	do one of two things:
+
+	\begin{enumerate}
+		\item \textit{Exchange}: If he has at least 3 red beads in his bowl, then he may exchange 3 red beads
+		for 2 green beads.
+		\item \textit{Swap}: He may replace each green bead in his bowl with a red bead and replace each
+		red bead in his bowl with a green bead. That is, if he starts with $i$ red beads and
+		$j$ green beads, then after he performs this operation, he will have $j$ red beads and $i$
+		green beads.
+	\end{enumerate}
+
+	A monk may leave the Temple of Forever only when he has exactly 5 red beads and
+	5 green beads in his bowl.  Let’s look at how we can represent this problem as
+	a state machine.
+
+	\begin{itemize}
+		\item What do the states of the machine look like?
+		\item Use the notation you developed above to represent the allowable transitions in the
+		state machine.
+		\item Expand the state machine diagram to the first three or four levels. Label the transitions
+		according to the operation type (E for \textit{exchange} or S for \textit{swap}).
+	\end{itemize}
+
+	Now we’ll show that no monk can ever escape the Temple of Forever because the state
+	(5, 5) violates an invariant of the Temple of Forever machine.
+
+	\begin{theorem}
+		No one ever leaves the Temple of Forever.
+	\end{theorem}
+
+	Prove this theorem by induction.
+
+	\begin{proof}[Proof (by induction)]
+
+		Let each state at after $n$ transitions (where a transition is
+		either a \textit{exchange} or \textit{swap} as defined above),
+		be described as $(i_{n}, j_{n})$ such that $i, j$ are the
+		number of red and green beads in the bowl, respectively. We
+		define the inductive hypothesis, $P(n) := i_{n} - j_{n}
+		\not\equiv 0 \pmod{5}$, for all states reachable in $n$
+		transitions where $n \in \mathbb{N}_0$.
+
+		We will show that the desired state $(5, 5)$ is unreachable
+		because $(5 - 5) \equiv 0 \pmod{5}$ and $P(n)$ is invariant
+		over all reachable states (proving this point by induction below).
+
+		\textbf{Base case}. $P(0) \iff (15 - 12) \not \equiv 0 \pmod{5}$.
+
+		\textbf{Inductive case}. Assume $P(n)$ for the purposes of
+		establishing $P(n) \implies P(n+1)$. Swapping doesn't change
+		whether the difference in red and green beads in the subsequent
+		step is divisible by 5 since $i_{n+1} - j_{n+1} \equiv j_{n} -
+		i_{n} \not \equiv 0 \pmod{5}$, where the swap transition from
+		step $n$ to $n+1$ is $i_{n+1} = j_{n},\ j_{n+1} = j_{n}$.
+		Exchanging red beads for green beads results in $i_{n+1} -
+		j_{n+1} = (i_{n} - j_{n}) - 5$, so $i_{n+1} - j_{n+1} \not
+		\equiv 0 \pmod{5}$.
+
+		With both base and inductive cases established, $P(n)$ is proven.
+	\end{proof}
+
+	Now let’s take a look at a different property of the Temple of Forever
+	machine.
+
+	\begin{theorem}
+		There is a finite number of reachable states in the Temple of Forever machine.
+	\end{theorem}
+
+	Prove this theorem. (Hint: First find an invariant that suggests an
+	upper bound on the number of reachable states. Be sure to prove the
+	invariant.)
+
+	\begin{proof}[Proof (by induction)]
+
+		Let each state at after $n$ transitions (where a transition is
+		either a \textit{exchange} or \textit{swap} as defined above),
+		be described as $(i_{n}, j_{n})$ such that $i, j$ are the
+		number of red and green beads in the bowl, respectively. We
+		define the inductive hypothesis, $P(n) := i_{n} + j_{n}
+		\le 27$, for all states reachable in $n$
+		transitions where $n \in \mathbb{N}_0$.
+
+		\textbf{Base case}. $P(0)$ is true because $(15 + 12) \leq 27$.
+
+		\textbf{Inductive case}. Assume $P(n)$ for the purposes of
+		establishing $P(n) \implies P(n+1)$. Swapping doesn't change
+		the sum of red and green beads since $i_{n+1} + j_{n+1} = j_{n}
+		+ i_{n}$, where the swap transition from step $n$ to $n+1$ is
+		$i_{n+1} = j_{n},\ j_{n+1} = j_{n}$. If an exchange is possible
+		(i.e., $i \ge 3$), exchanging red beads for green beads reduces
+		the sum of beads in the bowl by 1, so $i_{n+1} + j_{n+1} =
+		i_{n} + j_{n} - 1 < i_{n} + j_{n} \le 27$.
+
+		With both base and inductive cases established, $P(n)$ is
+		proven. Because the total number of beads in the bowl cannot be
+		negative, the possible states $(i, j)$ satisfy $0 \le i + j \le
+		27$, which means the possible states are finite.
+
+	\end{proof}
+
+	Inside the Temple of Forever, the Gong of Time rings on. As you may
+	well imagine, the monks begin to recognize that no matter how many ways
+	they try to exchange or swap their beads, they always seem to end up in
+	some state they’ve already been in before! For one or two monks, this
+	realization is all they need to propel them instantly into a state of
+	enlightenment. For the overwhelming majority, however, this knowledge
+	does nothing but weaken their resolve. They just get depressed. Taking
+	note of the mental state of this second group, the Keeper of the Temple
+	makes an unannounced appearance and proclaims to the group, “From now
+	on, any monk who is able to visit 108 (108 being the mystical number
+	that encompasses all of existence \footnote{See
+	\url{http://astrologyforthesoul.com/vp/mysticalnumber108.html}. Also
+	consider: 42 + 24 + 42 = 108.}) unique states will be allowed to leave the
+	Temple of Forever.”
+
+	Do the monks have any chance of leaving the Temple of Forever?
+
+	\begin{theorem}
+		 It is not possible to visit 108 unique states in the Temple of Forever machine.
+	\end{theorem}
+
+	Prove this theorem. (Hint: Consider a proof by contradiction.)
+
+	\begin{proof}[Proof (by contradiction).]
+
+		Consider the sequence of moves required to generate 108 unique
+		states for this state machine. Because $i + j$ either stays the
+		same or decreases by 1 for a swap and exchange, respectively,
+		and the absorbing state occurs when $i + j < 3$, 25 exchanges
+		at most are possible.
+
+		Each swap adds a unique state exactly once (even though
+		unlimited swaps are allowed), so the maximum sequence length is
+		$52 = 2(25) + 2$ if a double swap occurs before the first exchange.
+
+		Having reached a contradiction, the theorem is proved.
+
+	\end{proof}
+
+\end{document}
