@@ -1,0 +1,153 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsthm, hyperref}
+
+\newcommand{\CheckedBox}{\mbox{\ooalign{$\checkmark$\cr\hidewidth$\square$\hidewidth\cr}}\hspace{5pt}}
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+	\def\svgwidth{\columnwidth}
+	\import{./figures/}{#1.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+
+\section{Problem: Geometric Sum}%
+\label{sec:Problem: Geometric Sum}
+
+Perhaps you encountered this classic formula in school:
+
+\begin{equation*}
+	1 + r + r^{2} + r^{3} + \ldots + r^{n} = \frac{1 - r^{n+1}}{1-r}
+\end{equation*}
+
+\noindent
+First use the well-ordering principle, and then induction, to prove that this
+formula is correct for all real values $r \neq 1$.
+
+\begin{proof}[Proof (by contradiction \& the well-ordering principle)]
+
+	Let $P$ be the statement we're trying to prove and let $C$ be the set of
+	counterexamples of $P$, $C := \lbrace n \in \mathbb{N}_{0} \mid P(n) \text{
+	is false}\rbrace$. For sake of setting up a contradiction, assume $|C| > 0$.
+	Because $n$ ranges over non-negative integers, $C$ must have a smallest
+	element by the well-ordering principle, called $n_{0}$. $n_{0} > 0$ since
+	$P(0)$ is true. Let $k = n_{0} - 1$, so $P(k)$ is true (otherwise it would be
+	a smaller element in $C$). We reach a contradiction where $P(n_{0})$ is true:
+
+	\begin{align*}
+	1 + r + r^{2} + r^{3} + \ldots + r^{k} &=  \frac{1 - r^{k + 1}}{1 - r}\\
+		1 + r \left(1 + r + r^{2} + r^{3} + \ldots + r^{k} \right) &= 1 + r \left(\frac{1 - r^{k + 1}}{1 - r}\right)\\
+		1 + \left(r + r^{2} + r^{3} + \ldots + r^{k+1}\right) &= \left(\frac{1 - r^{k + 2}}{1 - r}\right)\\
+		1 + r^{2} + r^{3} + \ldots + r^{n_{0}} &= \left(\frac{1 - r^{n_{0} + 1}}{1 - r}\right)\\
+	\end{align*}
+
+	Hence, $C$ must be empty (i.e., $P$ has no counterexamples).
+\end{proof}
+
+\begin{proof}[Proof (by induction)]
+
+	We will proceed by inducting on $n$ to show $P(n)$ is always true.
+
+	\textbf{Base case.} $P(0)$ is true because $1 = \frac{1 - r^{(0 + 1)}}{1 - r}$.
+
+	\textbf{Inductive case.} We need to show $P(n) \implies P(n+1)$. Assuming $P(n)$:
+	\begin{align*}
+	1 + r + r^{2} + r^{3} + \ldots + r^{n} &=  \frac{1 - r^{n + 1}}{1 - r}\\
+	1 + r \left(1 + r + r^{2} + r^{3} + \ldots + r^{n} \right) &= 1 + r \left(\frac{1 - r^{n + 1}}{1 - r}\right)\\
+	1 + r + r^{2} + r^{3} + \ldots + r^{n+1} &= \left(\frac{1 - r^{(n + 1) + 1}}{1 - r}\right)\\
+	\therefore P(n) \implies P(n+1)
+	\end{align*}
+
+	With the base and inductive case proved, $P$ is true over all $n \in
+\mathbb{N}_{0}$.  \end{proof}
+
+\section{Problem: The Surveyevor}%
+\label{sec:Problem: The Surveyevor}
+
+In a new reality TV series called Surveyevor, a group of contestants is placed on a small
+island. Before the series begins, each contestant agrees to have a small purple or red tattoo,
+in the shape of an eye, applied to the middle of his or her forehead. In all, there are p $\geq$ 1
+purple eyes and r $\geq$ 0 red eyes. However, none of the contestants knows the color of his or
+her third eye, nor how many total purple and red eyes there are. Furthermore, there are no
+mirrors and no one is allowed to discuss the tattoos ever. Therefore, everyone knows the
+colors of everyone else’s third eye, but not their own. Good thing, because a contestant who
+learns that he or she has a purple eye must leave the island at the end of the show that day,
+and is therefore no longer eligible to win the \$1 million cash prize at the end of the show!
+
+The contestants live in uneasy ignorance for several weeks. As time goes on, however,
+most of them lose their fear of being exiled, adapt to island living, and even make friends
+with one another. Things are going quite well for the islanders, but as you might suppose,
+the television audience grows bored, and the show’s ratings plummet. When the network
+threatens to cancel the series, the producer decides she needs to do something, fast: on the
+next show, to the surprise of the happy islanders, the producer herself appears and convenes
+a meeting. Very loudly, she proclaims, “I see that at least one person here has a purple eye.”
+Assuming that all the contestants are master logicians, what happens?
+
+\bigskip
+
+\textbf{Solution}. On day $n = p$, all $p$ contestants with purple tattoos leave the island.
+
+\begin{proof}[Proof (by induction)]
+
+	Let $P(n)$ be defined as the conjunction of the following three statements:
+
+	\begin{enumerate}
+		\item \label{cond:1} If $p > n$, then no one has yet left the island on Day  $n$.
+		\item \label{cond:2} If $p = n$, then all $p$ contestants with purple tattoos leave the island on Day $n$.
+		\item \label{cond:3} If $p < n$, then no one leaves the island on Day $n$ because all purple tattooed contestants already left.
+	\end{enumerate}
+
+	We will proceed by inducting on $n$ to show $P(n)$ is always true.
+
+	\textbf{Base case.} $P(1)$ is true when considering the truth of the
+	comprising conditionals:
+	\begin{enumerate}
+		\item \CheckedBox If $p > 1$, then no one has yet left the island in Day $1$. This is true because each
+			purple tattooed contestant knows of at least one other purple tattooed
+			contestant, so in their mind, they could still possess either a red or
+			purple tattoo.
+		\item \CheckedBox If $p = 1$, then all $p$ contestants with purple tattoos
+			leave the island on Day $1$. This is true because the sole purple tattoo bearer
+			would see that all the other contestants have red tattoos and would know
+			he/she has a purple tattoo.
+		\item \CheckedBox If $p < 1$, then no one leaves the island on Day $1$. This is vacuously true since $p \geq 1$.
+\end{enumerate}
+
+	\textbf{Inductive case.} Assuming $P(n)$, we must show $P(n+1)$:
+	\begin{enumerate}
+		\item \CheckedBox If $p > n + 1$, then no one has yet left the island on Day $n+1$. By
+			definition, $p > n+1 \implies p > n$. From part \ref{cond:1} of $P(n)$,
+			all the purple-eyed contestants have survived Day $n$. On day $n + 1$,
+			the purple eye tattooed contestants see at least $n + 1$ other
+			purple-eyed peers. Seeing this many purple-eyed peers and knowing no one
+			has left, a purple-eyed contestant may still think they have a red eye
+			tattoo.
+		\item \CheckedBox If $p = n + 1$, then all $p$ contestants with purple
+			tattoos leave the island on Day $n+1$. All contestants survive Day $n$, but a
+			purple-eyed contestant seeing only $n$ other purple-eyed contestants
+			realizes they have a purple eye, too.
+		\item \CheckedBox If $p < n + 1$, then no one leaves the island on Day $n + 1$. In the
+			case where $p = n$, then everyone already left on the prior day, Day $n$.
+			If $p < n$, then all the purple-eyed contestants had already left on a
+			day prior to Day $n$. 
+\end{enumerate}
+
+
+	With the base and inductive cases proven, $P(n)$ is true over all $n \in
+	\mathbb{Z}^{+}$.
+
+\end{proof}
+
+\end{document}
