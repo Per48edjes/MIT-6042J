@@ -1,0 +1,117 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+	\def\svgwidth{\columnwidth}
+	\import{./figures/}{#1.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+	\section{Problem 1}%
+	\label{sec:Problem 1}
+
+	An undirected graph $G$ has \textbf{\textit{width}} $w$ if the vertices can
+	be arranged in a sequence $$ v_{1}, v_{2}, v_{3}, \ldots, v_{n} $$ such that
+	each vertex $v_{i}$ is joined by an edge to at most $w$ preceding vertices.
+	(Vertex $v_{j}$ \textit{precedes} $v_{i}$ if $j < i$.) Use induction to prove
+	that every graph with width at most $w$ is $(w+1)$-colorable.  (Recall that a
+	graph is $k$-colorable iff every vertex can be assigned one of $k$ colors so
+	that adjacent vertices get different colors.)
+
+	\begin{proof}[Proof (by induction).]
+
+		We will complete this proof by induction by inducting on the number of
+		vertices $n$ and maximal width $w$ of a graph with the inductive
+		hypothesis $P(n, w)$ defined as: $G$ is a $n$-node undirected graph with
+		maximal width $w$ $\implies$ $G$ is $(w+1)$-colorable.
+
+		\textbf{Base case}. $P(1, 0)$ is trivially true since a single node graph
+		can be colored with one color.
+
+		\textbf{Inductive cases}. To establish $P(n, w)$, there are two more implications to prove:
+		\begin{enumerate}
+			\item $P(n, 0) \implies P(n+1, 0)$
+			\item $P(n, w) \implies P(n, w+1)$
+		\end{enumerate}
+
+		Note that these implications must hold $\forall n.\ n \geq 1\ \forall w.\ 0
+		\leq w < n$ since the greatest maximal width, $w^{*} = n-1$, is the highest
+		degree any node in an $n$-node graph can have. Thus, $w$ is bounded by $n$ since
+		no sequence (as described in the problem statement) of vertices produces
+		$w \geq n$ -- the greatest maximal width $w^{*}$ can be found by any
+		arbitrary sequence of vertices with the highest degree vertex at the end of
+		the sequence. When $w < w+1 \leq w^{*} < n$ is violated, $P(n, w)$ is vacuously true.
+
+		\begin{enumerate}
+
+			\item $P(n, 0) \implies P(n+1, 0)$ is true since all graphs without any
+				edge can be colored by $w+1 = 0+1 = 1$ color.
+
+			\item $P(n, w) \implies P(n, w+1)$ is true (when $w < w+1 \leq w^{*} <
+				n$) because the extra available color when an edge is added between the
+				highest degree node in $G$ to another vertex which it was not connected
+				to before (read: the only way to increase the maximal width of a graph
+				by $1$) can be used to color either endpoint in the case these two
+				vertices are colored the same.
+
+		\end{enumerate}
+
+
+	\end{proof}
+
+
+	\section{Problem 2}%
+	\label{sec:Problem 2}
+
+	A \textbf{\textit{planar graph}} is a graph that can be drawn without any edges crossing.
+
+	\begin{enumerate}
+	\setlength\parskip{12pt}
+		\item First, show that any subgraph of a planar graph is planar.
+
+			\textbf{Solution.} A subgraph of a graph contains a subset of the edges
+			found in the graph. Since the graph is planar, all of its edges do not
+			cross with any of the other edges. Every element of a subset of these
+			edges do not cross either with the members either, so the subgraph is
+			also planar.
+
+		\item Also, any planar graph has a node of degree at most $5$. Now prove by
+			induction that any planar graph can be colored in at most $6$ colors.
+
+	\begin{proof}[Proof (by induction).]
+
+		We will complete this proof by induction by inducting on the number of
+		vertices $n$ that comprise a planar graph $G$. The inductive hypothesis,
+		$P(n)$, is that such a graph $G$ is $6$-colorable.
+
+		\textbf{Base case}. $P(1)$ is trivially true since \textit{any} one-node graph
+		can be colored in as few as $1$ color.
+
+		\textbf{Inductive case}. We will show $P(n) \implies P(n+1)$. Let
+		$G^{\prime}$ be a planar graph consisting of $n + 1$ nodes. Removing a node
+		with degree $\leq 5$ (which is guaranteed to exist from the fact in the
+		problem statement) and its incident edges yields an induced subgraph $G$
+		which is planar (from the fact proven in the prior question) and
+		$6$-colorable (assuming $P(n)$).  The removed vertex is connected to nodes
+		representing at most $5$ different colors. Using a sixth color to color this
+		removed vertex results in $G^{\prime}$ being $6$-colorable.
+
+	\end{proof}
+
+	\end{enumerate}
+
+\end{document}
